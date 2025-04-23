@@ -278,7 +278,9 @@ else:
             data=df_filtrado,
             x="Componente",
             y="Contenido de agua %",
+            hue="Componente",
             palette="Set3",
+            legend=False,
             ax=ax
         )
         ax.set_title("Contenido de Agua", fontsize=10, color="#003366")

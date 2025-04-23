@@ -309,7 +309,7 @@ else:
             df_filtrado.groupby(["Aceite Lubricante", "Criticidad"]).size().unstack(fill_value=0)
         )
         fig, ax = plt.subplots(figsize=(6, 4))
-        criticidad_por_aceite.plot(kind="bar", stacked=True, ax=ax, coor=["#ff7f0e", "#d62728", "#2ca02c"])
+        criticidad_por_aceite.plot(kind="bar", stacked=True, ax=ax, color=["#ff7f0e", "#d62728", "#2ca02c"])
         ax.set_title("Criticidad por Aceite Lubricante", fontsize=10, color="#003366")
         ax.set_xlabel("Aceite Lubricante", fontsize=8)
         ax.set_ylabel("Cantidad", fontsize=8)

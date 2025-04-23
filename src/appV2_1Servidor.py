@@ -19,12 +19,14 @@ st.markdown("""
     background-color: #FF6F00; /* Fondo naranja vibrante */
     color: #FFFFFF; /* Texto blanco para contraste */
 }
+
 /* Cambiar el color de los títulos */
 h1, h2, h3, h4, h5, h6 {
     color: #FFFFFF; /* Texto blanco para los títulos */
     font-family: 'Arial', sans-serif; /* Fuente clara y profesional */
     font-weight: bold; /* Asegurar que los títulos sean prominentes */
 }
+
 /* Cambiar el color de los widgets (botones) */
 div.stButton > button {
     background-color: #FF6F00; /* Naranja vibrante */
@@ -37,6 +39,7 @@ div.stButton > button {
 div.stButton > button:hover {
     background-color: #E65C00; /* Un tono más oscuro de naranja al pasar el mouse */
 }
+
 /* Cambiar el color de los selectores */
 .stSelectbox > div > div {
     background-color: #FF6F00; /* Fondo naranja */
@@ -44,6 +47,7 @@ div.stButton > button:hover {
     border: 1px solid #CCCCCC; /* Borde sutil para definir los límites */
     border-radius: 5px; /* Bordes redondeados */
 }
+
 /* Cambiar el color de los inputs de texto */
 .stTextInput > div > div > input {
     background-color: #FF6F00; /* Fondo naranja */
@@ -51,6 +55,7 @@ div.stButton > button:hover {
     border: 1px solid #CCCCCC; /* Borde sutil */
     border-radius: 5px; /* Bordes redondeados */
 }
+
 /* Cambiar el color de las tablas */
 .stDataFrame > div > table {
     background-color: #FF6F00; /* Fondo naranja */
@@ -58,23 +63,27 @@ div.stButton > button:hover {
     border: 1px solid #CCCCCC; /* Borde sutil */
     border-radius: 5px; /* Bordes redondeados */
 }
+
 /* Cambiar el color de los sliders */
 .stSlider > div > div > div {
     background-color: #FF6F00; /* Fondo naranja */
     color: #FFFFFF; /* Texto blanco */
     border-radius: 5px; /* Bordes redondeados */
 }
+
 /* Cambiar el color del sidebar */
 [data-testid="stSidebar"] {
     background-color: #000000; /* Fondo negro para el sidebar */
     color: #FFFFFF; /* Texto blanco para contraste */
 }
+
 /* Cambiar el color de los títulos del sidebar */
 [data-testid="stSidebar"] h1,
 [data-testid="stSidebar"] h2,
 [data-testid="stSidebar"] h3 {
     color: #FFFFFF; /* Texto blanco para los títulos del sidebar */
 }
+
 /* Cambiar el color de los widgets en el sidebar */
 [data-testid="stSidebar"] .stButton > button {
     background-color: #FF6F00; /* Naranja vibrante */
@@ -300,7 +309,7 @@ else:
             df_filtrado.groupby(["Aceite Lubricante", "Criticidad"]).size().unstack(fill_value=0)
         )
         fig, ax = plt.subplots(figsize=(6, 4))
-        criticidad_por_aceite.plot(kind="bar", stacked=True, ax=ax, color=["#ff7f0e", "#d62728", "#2ca02c"])
+        criticidad_por_aceite.plot(kind="bar", stacked=True, ax=ax, coor=["#ff7f0e", "#d62728", "#2ca02c"])
         ax.set_title("Criticidad por Aceite Lubricante", fontsize=10, color="#003366")
         ax.set_xlabel("Aceite Lubricante", fontsize=8)
         ax.set_ylabel("Cantidad", fontsize=8)

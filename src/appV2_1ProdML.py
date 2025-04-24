@@ -1,12 +1,18 @@
 import pandas as pd
+import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
 
-###############################  Modelo Machine Learning  ################################################
+st.set_page_config(
+    page_title="Dashboard Tribológico",
+    layout="wide",
+    page_icon="📊",
+    initial_sidebar_state="expanded"
+)
 
-
+############################### Modelo Machine Learning ################################################
 # Cargar el modelo entrenado
 @st.cache_resource
 def cargar_modelo():
@@ -14,46 +20,99 @@ def cargar_modelo():
 
 modelo = cargar_modelo()
 
+# Cargar los nombres de características
+@st.cache_resource
+def cargar_feature_names():
+    return joblib.load("data/feature_names.joblib")
+
+feature_names = cargar_feature_names()
+
 # Función para hacer predicciones
 def predecir_criticidad(datos):
     # Codificar las variables categóricas
-    datos_encoded = pd.get_dummies(datos).reindex(columns=modelo.feature_names_in_, fill_value=0)
+    datos_encoded = pd.get_dummies(datos).reindex(columns=feature_names, fill_value=0)
     # Hacer la predicción
     prediccion = modelo.predict(datos_encoded)
     return prediccion
 
-# Interfaz de usuario para hacer predicciones
-st.subheader("Predicción de Criticidad")
-equipo = st.selectbox("Selecciona Equipo:", ["Equipo A", "Equipo B", "Equipo C"])
-componente = st.selectbox("Selecciona Componente:", ["Componente 1", "Componente 2", "Componente 3"])
-viscosidad = st.number_input("Viscosidad (cSt)", value=10.0)
-tan = st.number_input("TAN (mg KOH/g)", value=1.0)
-tbn = st.number_input("TBN (mg KOH/g)", value=5.0)
+# Función para generar valores automáticos de minerales y otros parámetros
+def generar_valores_automaticos(equipo, componente, aceite_lubricante):
+    # Definir rangos típicos basados en el equipo, componente y aceite lubricante
+    valores_generados = {
+        "Viscosidad 100°C cSt(mm2/s)": np.round(np.random.uniform(10, 20), 2),
+        "TAN mg KOH/g": np.round(np.random.uniform(0, 4), 2),
+        "TBN mg KOH/g": np.random.randint(0, 10),
+        "Silicio (Si) ppm": np.random.randint(0, 50),
+        "Hierro (Fe) ppm": np.random.randint(0, 300),
+        "Aluminio (Al) ppm": np.random.randint(0, 30),
+        "Cobre (Cu) ppm": np.random.randint(0, 50),
+        "Cromo (Cr) ppm": np.random.randint(0, 10),
+        "Níquel (Ni) ppm": np.random.randint(0, 10),
+        "Residuo Ferroso Total mg/kg": np.random.randint(0, 600),
+        "Contenido de Partículas Sólidas mg/L": np.random.randint(0, 100),
+        "Índice de Oxidación": np.random.randint(0, 5)
+    }
+    return valores_generados
 
-# Crear un DataFrame con los datos ingresados
+# Interfaz de usuario para hacer predicciones
+st.subheader("Predicción Automática de Criticidad")
+
+# Equipos generados en el script
+equipos = [
+    "CATERPILLAR 797F", "CATERPILLAR 988H", "CATERPILLAR 24M", "KOMATSU 930-E4",
+    "KOMATSU 930E-4SE", "KOMATSU 980 E5", "KOMATSU 930 E3", "KOMATSU 930 E4", "KOMATSU 930 E5",
+    "KOMATSU 950 E3", "CAEX", "KOMATSU 950 E4", "KOMATSU 960 E2-K"
+]
+equipo = st.selectbox("Selecciona Equipo:", equipos)
+
+# Componentes generados en el script
+componentes = [
+    "MANDO FINAL", "TRANSMISIÓN", "DIFERENCIAL DEL", "MOTOR", "SISTEMA HIDRAULICO",
+    "MANDO FINAL TRA.DER", "MANDO FINAL TRA.IZQ", "MASA DERECHA", "MASA IZQUIERDA",
+    "MOTOR TRACCION IZQ", "MOTOR TRACCION DER", "DIFERENCIAL TRA"
+]
+componente = st.selectbox("Selecciona Componente:", componentes)
+
+# Aceites Lubricantes asociados a los componentes
+aceites_lubricantes = {
+    "MANDO FINAL": "MOBIL MOBILTRANS HD 30",
+    "TRANSMISIÓN": "MOBIL MOBILTRANS HD 30",
+    "DIFERENCIAL DEL": "MOBIL MOBILTRANS HD 30",
+    "MOTOR": "MOBIL DELVAC 15W40",
+    "SISTEMA HIDRAULICO": "MOBIL DTE 24",
+    "MANDO FINAL TRA.DER": "MOBIL MOBILTRANS HD 30",
+    "MANDO FINAL TRA.IZQ": "MOBIL MOBILTRANS HD 30",
+    "MASA DERECHA": "MOBIL MOBILTRANS HD 30",
+    "MASA IZQUIERDA": "MOBIL MOBILTRANS HD 30",
+    "MOTOR TRACCION IZQ": "MOBIL SHC GEAR 680",
+    "MOTOR TRACCION DER": "MOBIL SHC GEAR 680",
+    "DIFERENCIAL TRA": "MOBIL MOBILTRANS HD 30"
+}
+aceite_lubricante = aceites_lubricantes.get(componente, "No especificado")
+st.write(f"Aceite Lubricante: {aceite_lubricante}")
+
+# Generar valores automáticos
+valores_generados = generar_valores_automaticos(equipo, componente, aceite_lubricante)
+st.write("Valores Generados Automáticamente:")
+st.json(valores_generados)
+
+# Crear un DataFrame con los datos generados
 input_data = pd.DataFrame({
     "Equipo": [equipo],
     "Componente": [componente],
-    "Viscosidad 100°C cSt(mm2/s)": [viscosidad],
-    "TAN mg KOH/g": [tan],
-    "TBN mg KOH/g": [tbn]
+    "Aceite Lubricante": [aceite_lubricante],
+    **{k: [v] for k, v in valores_generados.items()}
 })
 
 # Botón para predecir
 if st.button("Predecir"):
     prediccion = predecir_criticidad(input_data)
     st.success(f"Nivel de Criticidad Predicho: {prediccion[0]}")
-
-######################################### Fin Modelo de ML #####################################
+######################################### Fin Modelo de ML ###################################
 
 
 # Configurar la página
-st.set_page_config(
-    page_title="Dashboard Tribológico",
-    layout="wide",
-    page_icon="📊",
-    initial_sidebar_state="expanded"
-)
+
 
 # Estilo personalizado para un diseño más elegante
 st.markdown("""

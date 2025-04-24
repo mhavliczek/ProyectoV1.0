@@ -10,7 +10,7 @@ import joblib
 # Cargar el modelo entrenado
 @st.cache_resource
 def cargar_modelo():
-    return joblib.load("../data/modelo_entrenado.joblib")
+    return joblib.load("data/modelo_entrenado.joblib")
 
 modelo = cargar_modelo()
 

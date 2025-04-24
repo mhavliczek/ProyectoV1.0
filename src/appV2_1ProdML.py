@@ -129,7 +129,9 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Arial', sans-serif; /* Fuente clara y profesional */
     font-weight: bold; /* Asegurar que los títulos sean prominentes */
 }
-
+p{
+  color: #FFFFFF; /* Texto blanco */          
+}
 /* Cambiar el color de los widgets (botones) */
 div.stButton > button {
     background-color: #FF6F00; /* Naranja vibrante */

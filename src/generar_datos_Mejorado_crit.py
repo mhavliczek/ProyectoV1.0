@@ -102,15 +102,13 @@ def ajustar_valores(row):
 # Función para generar datos aleatorios con distribución de criticidad controlada
 def generar_datos_aleatorios():
     global NUM_MUESTRA_DIGITOS, NUM_REGISTRO
-
     # Cargar el estado actual
     cargar_estado()
-
     # Generar nuevos datos
     datos = {
         "Fecha": [datetime.now() + timedelta(minutes=5 * i) for i in range(num_registros)],
         "Equipo": np.random.choice(equipos, size=num_registros),
-        "Componente": np.random.choice(list(componentes_aceites.keys()), size=num_registros),
+        "Componente": [],
         "Aceite Lubricante": [],
         "nflota": np.random.choice(nflota, size=num_registros),
         "cambioLubricanate": np.random.choice(cambioLubricanate, size=num_registros),
@@ -155,42 +153,34 @@ def generar_datos_aleatorios():
         "Numero Registro": [],
         "Numero Serie Equipo": []
     }
-
     # Generar números únicos
     for _ in range(num_registros):
         # Generar número de muestra
         letra_muestra = np.random.choice(list(NUM_MUESTRA_LETRAS))
         NUM_MUESTRA_DIGITOS += 1
         numero_muestra = f"{letra_muestra}{NUM_MUESTRA_DIGITOS:05d}"  # Formato: A00001, B00002, etc.
-
         # Generar número de registro
         NUM_REGISTRO += 1
         numero_registro = f"{NUM_REGISTRO:07d}"  # Formato: 0000001, 0000002, etc.
-
         # Generar número de serie del equipo
         numero_serie_equipo = f"LAJ{np.random.randint(0, 1000):03d}"  # Formato: LAJ001, LAJ999, etc.
-
+        # Seleccionar componente y asociar aceite lubricante
+        componente_seleccionado = np.random.choice(list(componentes_aceites.keys()))
+        aceite_lubricante = componentes_aceites[componente_seleccionado]
         # Agregar los datos generados
+        datos["Componente"].append(componente_seleccionado)
+        datos["Aceite Lubricante"].append(aceite_lubricante)
         datos["Numero Muestra"].append(numero_muestra)
         datos["Numero Registro"].append(numero_registro)
         datos["Numero Serie Equipo"].append(numero_serie_equipo)
-
-        # Asociar aceite lubricante al componente
-        componente_seleccionado = datos["Componente"][-1]
-        datos["Aceite Lubricante"].append(componentes_aceites.get(componente_seleccionado, "No especificado"))
-
     # Guardar el estado actualizado
     guardar_estado()
-
     # Convertir a DataFrame
     df = pd.DataFrame(datos)
-
     # Asignar criticidad controlada
     df["Criticidad"] = [generar_criticidad() for _ in range(num_registros)]
-
     # Ajustar valores según la criticidad asignada
     df = df.apply(ajustar_valores, axis=1)
-
     return df
 
 # Función para guardar datos en el archivo CSV

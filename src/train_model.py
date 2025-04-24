@@ -9,7 +9,7 @@ df = pd.read_csv("data/datos_generados.csv")
 
 # Paso 2: Preprocesamiento
 # Eliminar columnas no numéricas (como "Fecha")
-df = df.drop(columns=["Fecha"])
+df = df.drop(columns=["Fecha"], errors="ignore")
 
 # Codificar variables categóricas
 df_encoded = pd.get_dummies(df, columns=["Equipo", "Componente", "Aceite Lubricante"])

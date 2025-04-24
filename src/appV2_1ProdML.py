@@ -197,7 +197,10 @@ div.stButton > button:hover {
 """, unsafe_allow_html=True)
 
 # Título
+st.title("Proyecto de titulo")
 st.title("📊 Dashboard de Monitoreo Análisis Tribológico")
+st.title("Muestra Generada cada 2 hrs")
+
 
 # Función para cargar datos
 @st.cache_data(ttl=60)  # Actualiza los datos cada 60 segundos

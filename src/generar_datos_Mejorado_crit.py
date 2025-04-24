@@ -216,4 +216,4 @@ if __name__ == "__main__":
         df_nuevos = generar_datos_aleatorios()
         guardar_datos(df_nuevos)
         print("Datos guardados. Esperando 1 minutos...\n")
-        time.sleep(60)  # Esperar 1 minuto (60 segundos)
+        time.sleep(7200)  # Esperar 1 minuto (60 segundos)

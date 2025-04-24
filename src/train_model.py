@@ -5,9 +5,12 @@ from sklearn.metrics import classification_report
 import joblib
 
 # Paso 1: Cargar los datos
-df = pd.read_csv("data/datos_generados.csv")
+df = pd.read_csv("../data/datos_generados.csv")
 
 # Paso 2: Preprocesamiento
+# Eliminar columnas no numéricas (como "Fecha")
+df = df.drop(columns=["Fecha"])
+
 # Codificar variables categóricas
 df_encoded = pd.get_dummies(df, columns=["Equipo", "Componente", "Aceite Lubricante"])
 
@@ -28,5 +31,5 @@ print("Reporte de Clasificación:")
 print(classification_report(y_test, y_pred))
 
 # Paso 4: Guardar el modelo entrenado
-joblib.dump(model, "data/modelo_entrenado.joblib")
+joblib.dump(model, "../data/modelo_entrenado.joblib")
 print("Modelo entrenado y guardado en 'data/modelo_entrenado.joblib'")

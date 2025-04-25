@@ -267,63 +267,78 @@ else:
         )
         st.plotly_chart(fig, use_container_width=True)
 
-    # Gráfico de Distribución de Residuo Ferroso
-    with col2:
-        st.markdown("#### 📊 Distribución de Residuo Ferroso")
-        df_residuo = df_filtrado[df_filtrado["Residuo Ferroso Total mg/kg"] > 0]
-        fig = px.histogram(
-            df_residuo,
-            x="Residuo Ferroso Total mg/kg",
-            color="Componente",
-            nbins=10,
-            title="Distribución de Residuo Ferroso",
-            labels={"Residuo Ferroso Total mg/kg": "Residuo Ferroso (mg/kg)"},
-            template="plotly_dark"
-        )
-        fig.update_layout(
-            font=dict(size=10),
-            xaxis_title="Residuo Ferroso (mg/kg)",
-            yaxis_title="Frecuencia",
-            margin=dict(l=20, r=20, t=40, b=20)
-        )
-        st.plotly_chart(fig, use_container_width=True)
+# Gráfico de Distribución de Residuo Ferroso
+with col2:
+    st.markdown("#### 📊 Distribución de Residuo Ferroso")
+    df_residuo = df_filtrado[df_filtrado["Residuo Ferroso Total mg/kg"] > 0]
+    fig = px.box(
+        df_residuo,
+        x="Componente",
+        y="Residuo Ferroso Total mg/kg",
+        color="Componente",
+        title="Distribución de Residuo Ferroso",
+        labels={"Residuo Ferroso Total mg/kg": "Residuo Ferroso (mg/kg)"},
+        template="plotly_dark"
+    )
+    fig.update_layout(
+        font=dict(size=10),
+        xaxis_title="Componente",
+        yaxis_title="Residuo Ferroso (mg/kg)",
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     # Gráfico de Proporción de Niveles de Criticidad
-    with col1:
-        st.markdown("#### 📊 Proporción de Niveles de Criticidad")
-        criticidad_counts = df_filtrado["Criticidad"].value_counts()
-        fig = px.pie(
-            names=criticidad_counts.index,
-            values=criticidad_counts.values,
-            title="Proporción de Criticidad",
-            color_discrete_sequence=["#2ca02c", "#ff7f0e", "#d62728"],
-            template="plotly_dark"
-        )
-        fig.update_layout(
-            font=dict(size=10),
-            margin=dict(l=20, r=20, t=40, b=20)
-        )
-        st.plotly_chart(fig, use_container_width=True)
+with col1:
+    st.markdown("#### 📊 Proporción de Niveles de Criticidad")
+    criticidad_counts = df_filtrado["Criticidad"].value_counts()
+    fig = px.bar(
+        x=criticidad_counts.values,
+        y=criticidad_counts.index,
+        orientation="h",
+        title="Proporción de Criticidad",
+        labels={"x": "Cantidad", "y": "Nivel de Criticidad"},
+        color=criticidad_counts.index,
+        color_discrete_sequence=["#2ca02c", "#ff7f0e", "#d62728"],
+        template="plotly_dark"
+    )
+    fig.update_layout(
+        font=dict(size=10),
+        xaxis_title="Cantidad",
+        yaxis_title="Nivel de Criticidad",
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
-    # Gráfico de TAN vs TBN
-    with col2:
-        st.markdown("#### 📊 Comparación de TAN y TBN")
-        fig = px.scatter(
-            df_filtrado,
-            x="TAN mg KOH/g",
-            y="TBN mg KOH/g",
-            color="Componente",
-            title="Comparación de TAN y TBN",
-            labels={"TAN mg KOH/g": "TAN (mg KOH/g)", "TBN mg KOH/g": "TBN (mg KOH/g)"},
-            template="plotly_dark"
-        )
-        fig.update_layout(
-            font=dict(size=10),
-            xaxis_title="TAN (mg KOH/g)",
-            yaxis_title="TBN (mg KOH/g)",
-            margin=dict(l=20, r=20, t=40, b=20)
-        )
-        st.plotly_chart(fig, use_container_width=True)
+# Gráfico de Comparación de TAN y TBN
+with col2:
+    st.markdown("#### 📊 Comparación de TAN y TBN")
+    fig = px.scatter(
+        df_filtrado,
+        x="TAN mg KOH/g",
+        y="TBN mg KOH/g",
+        color="Componente",
+        title="Comparación de TAN y TBN",
+        labels={"TAN mg KOH/g": "TAN (mg KOH/g)", "TBN mg KOH/g": "TBN (mg KOH/g)"},
+        template="plotly_dark"
+    )
+    # Agregar línea de referencia (ejemplo: TAN = TBN)
+    fig.add_shape(
+        type="line",
+        x0=df_filtrado["TAN mg KOH/g"].min(),
+        y0=df_filtrado["TAN mg KOH/g"].min(),
+        x1=df_filtrado["TAN mg KOH/g"].max(),
+        y1=df_filtrado["TAN mg KOH/g"].max(),
+        line=dict(color="white", width=2, dash="dash"),
+        name="Línea de Referencia"
+    )
+    fig.update_layout(
+        font=dict(size=10),
+        xaxis_title="TAN (mg KOH/g)",
+        yaxis_title="TBN (mg KOH/g)",
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     # Gráfico de Contenido de Agua
     with col1:

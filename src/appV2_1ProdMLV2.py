@@ -241,31 +241,33 @@ else:
         )
         st.plotly_chart(fig, use_container_width=True)
 
-    # Gráfico de Tendencia de Viscosidad
-    with col1:
-        st.markdown("#### 📈 Tendencia de Viscosidad")
-        df_filtrado['Fecha'] = pd.to_datetime(df_filtrado['Fecha'])
-        df_agrupado = (
-            df_filtrado.groupby([pd.Grouper(key="Fecha", freq="W"), "Componente"])
-            .mean(numeric_only=True)
-            .reset_index()
-        )
-        fig = px.line(
-            df_agrupado,
-            x="Fecha",
-            y="Viscosidad 100°C cSt(mm2/s)",
-            color="Componente",
-            title="Tendencia de Viscosidad",
-            labels={"Viscosidad 100°C cSt(mm2/s)": "Viscosidad"},
-            template="plotly_dark"
-        )
-        fig.update_layout(
-            font=dict(size=10),
-            xaxis_title="Fecha",
-            yaxis_title="Viscosidad",
-            margin=dict(l=20, r=20, t=40, b=20)
-        )
-        st.plotly_chart(fig, use_container_width=True)
+# Gráfico de Dispersión: Tendencia de Viscosidad
+with col1:
+    st.markdown("#### 📈 Dispersión de Viscosidad")
+    df_filtrado['Fecha'] = pd.to_datetime(df_filtrado['Fecha'])
+    df_agrupado = (
+        df_filtrado.groupby([pd.Grouper(key="Fecha", freq="W"), "Componente"])
+        .mean(numeric_only=True)
+        .reset_index()
+    )
+    fig = px.scatter(
+        df_agrupado,
+        x="Fecha",
+        y="Viscosidad 100°C cSt(mm2/s)",
+        color="Componente",
+        title="Dispersión de Viscosidad",
+        labels={"Viscosidad 100°C cSt(mm2/s)": "Viscosidad"},
+        template="plotly_dark",
+        opacity=0.7,  # Transparencia para mejorar la visualización
+        size_max=10   # Tamaño máximo de los puntos
+    )
+    fig.update_layout(
+        font=dict(size=10),
+        xaxis_title="Fecha",
+        yaxis_title="Viscosidad",
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
 # Gráfico de Distribución de Residuo Ferroso
 with col2:

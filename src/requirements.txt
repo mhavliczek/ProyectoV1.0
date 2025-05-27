@@ -1,5 +1,5 @@
-ipandas
-inumpy
-istreamlit
-iplotly.express
-ijoblib
+pandas
+numpy
+streamlit
+plotly.express
+joblib

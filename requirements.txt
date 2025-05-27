@@ -4,3 +4,5 @@ numpy
 matplotlib
 pandas
 streamlit
+plotly.express
+plotly

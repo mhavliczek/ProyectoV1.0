@@ -3,6 +3,8 @@ import numpy as np
 import streamlit as st
 import plotly.express as px
 import joblib
+import os
+from pathlib import Path
 
 # Configuración de la página
 st.set_page_config(
@@ -14,11 +16,24 @@ st.set_page_config(
 
 ############################### Modelo Machine Learning ################################################
 # Cargar el modelo entrenado
+#@st.cache_resource
+#def cargar_modelo():
+#    return joblib.load("data/modelo_entrenado.joblib")
+
+#  modelo = cargar_modelo()
 @st.cache_resource
 def cargar_modelo():
-    return joblib.load("data/modelo_entrenado.joblib")
+    # Método 100% confiable para encontrar la ruta
+    base_dir = Path(__file__).resolve().parent.parent  # Sube dos niveles desde src/
+    ruta_modelo = base_dir / "data" / "modelo_entrenado.joblib"
+    
+    # Debug (opcional, quita después de verificar)
+    st.write(f"Buscando modelo en: {ruta_modelo}")
+    if not ruta_modelo.exists():
+        st.error(f"ERROR: Archivo no encontrado. Directorio actual: {list(Path('.').glob('*'))}")
+    
+    return joblib.load(ruta_modelo)
 
-modelo = cargar_modelo()
 
 # Cargar los nombres de características
 @st.cache_resource

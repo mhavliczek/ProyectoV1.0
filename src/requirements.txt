@@ -1,0 +1,5 @@
+ipandas
+inumpy
+istreamlit
+iplotly.express
+ijoblib
